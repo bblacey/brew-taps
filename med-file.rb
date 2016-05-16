@@ -3,11 +3,11 @@
 # PLEASE REMOVE ALL GENERATED COMMENTS BEFORE SUBMITTING YOUR PULL REQUEST!
 
 class MedFile < Formula
-  desc "MEDFile"
-  homepage "unknown"
-  url "http://files.salome-platform.org/Salome/other/med-3.0.7.tar.gz"
-  version "3.0.7"
-  sha256 "a7ff3772d2e14b50cbaf656391ba33520591e83fe35ed25ff762d15a2da678cd"
+  desc "MEDFile - Modeling and Data Exchange standardized format"
+  homepage "http://www.salome-platform.org"
+  url "http://files.salome-platform.org/Salome/other/med-3.1.0.tar.gz"
+  sha256 "153f825cced4387c0967fb0486bd3ee3d5b9f1820c8a8b1b44fbb2216e8b88da"
+  version "3.1.0"
   revision 1
 
   option "with-python", "Build Python bindings"
@@ -15,9 +15,6 @@ class MedFile < Formula
 
   depends_on "cmake" => :build
   depends_on "hdf5"
-
-  #Fix cmake quoting issue
-  patch :DATA
 
   def install
     cmake_args = std_cmake_args
@@ -49,18 +46,3 @@ class MedFile < Formula
     system "false"
   end
 end
-
-__END__
-diff -ur a/config/cmake_files/medMacros.cmake b/config/cmake_files/medMacros.cmake 
---- a/config/cmake_files/medMacros.cmake	2013-10-28 08:25:20.000000000 -0700
-+++ b/config/cmake_files/medMacros.cmake	2016-05-15 20:05:59.000000000 -0700
-@@ -206,7 +206,7 @@
- #include <time.h>
- 
- #  ifdef __cplusplus
--     extern "C"
-+     extern \"C\"
- #  endif
- 
- int
-
