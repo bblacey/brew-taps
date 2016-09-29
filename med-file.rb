@@ -5,12 +5,12 @@
 class MedFile < Formula
   desc "MEDFile - Modeling and Data Exchange standardized format"
   homepage "http://www.salome-platform.org"
-  url "http://files.salome-platform.org/Salome/other/med-3.1.0.tar.gz"
-  sha256 "153f825cced4387c0967fb0486bd3ee3d5b9f1820c8a8b1b44fbb2216e8b88da"
-  version "3.1.0"
-  revision 1
+  url "http://files.salome-platform.org/Salome/other/med-3.2.0.tar.gz"
+  sha256 "d52e9a1bdd10f31aa154c34a5799b48d4266dc6b4a5ee05a9ceda525f2c6c138"
+  version "3.2.0"
 
   option "with-python", "Build Python bindings"
+  option "with-fortran", "Build Python bindings"
   option "without-tests", "Do not build tests"
 
   depends_on "cmake" => :build
@@ -18,8 +18,10 @@ class MedFile < Formula
 
   def install
     cmake_args = std_cmake_args
-    cmake_args << "-DCMAKE_PREFIX_PATH:PATH=#{HOMEBREW_PREFIX}"
-    cmake_args << "-DCMAKE_INSTALL_PREFIX:PATH=#{prefix}"
+
+    if !build.with? "fortran"
+	cmake_args << "-DCMAKE_Fortran_COMPILER:BOOL=OFF"
+    end
 
     if build.with? "python"
        cmake_args << "-DMEDFILE_BUILD_PYTHON:BOOL=ON"
@@ -29,7 +31,7 @@ class MedFile < Formula
        cmake_args << "-DMEDFILE_BUILD_TESTS:BOOL=OFF"
     end
 
-    system "cmake", ".", *std_cmake_args
+    system "cmake", ".", *cmake_args
     system "make", "install" # if this fails, try separate make/make install steps
   end
 
@@ -43,6 +45,6 @@ class MedFile < Formula
     #
     # The installed folder is not in the path, so use the entire path to any
     # executables being tested: `system "#{bin}/program", "do", "something"`.
-    system "false"
+    system "#{bin}/cmake", "test"
   end
 end
